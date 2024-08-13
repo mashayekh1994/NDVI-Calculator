@@ -1,0 +1,15 @@
+<!-- ndvi_result_detail.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>NDVI Detail</title>
+</head>
+<body>
+    <h1>NDVI Detail for {{ ndvi_result.area.name }} on {{ ndvi_result.capture_date }}</h1>
+    <img src="{{ ndvi_result.ndvi_image_url }}" alt="NDVI Image">
+    <p>Minimum NDVI: {{ ndvi_result.min_ndvi }}</p>
+    <p>Maximum NDVI: {{ ndvi_result.max_ndvi }}</p>
+    <a href="{% url 'monitoring_area_ndvi_map' ndvi_result.area.pk %}">View NDVI Map for {{ ndvi_result.area.name }}</a>
+</body>
+</html>

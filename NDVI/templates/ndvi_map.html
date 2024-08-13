@@ -1,0 +1,80 @@
+<!-- ndvi_map.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>NDVI Map</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+        #map {
+            height: 600px;
+        }
+        .legend {
+            background-color: white;
+            padding: 10px;
+            line-height: 18px;
+            color: #555;
+        }
+        .legend i {
+            width: 18px;
+            height: 18px;
+            float: left;
+            margin-right: 8px;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+    <h1>NDVI Map</h1>
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+        var map = L.map('map').setView([35.6892, 51.3890], 10); 
+
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19
+        }).addTo(map);
+
+        {% for result in ndvi_results %}
+            var ndviUrl = "{{ result.ndvi_image_url }}";
+            var bounds = L.geoJSON({{ result.area.area.geojson|safe }}).getBounds();
+            L.imageOverlay(ndviUrl, bounds).addTo(map);
+        {% endfor %}
+
+        // Adding Legend to the map
+        var legend = L.control({ position: 'bottomright' });
+
+        legend.onAdd = function (map) {
+            var div = L.DomUtil.create('div', 'legend'),
+                grades = [0, 0.2, 0.4, 0.6, 0.8, 1],
+                labels = [];
+
+            div.innerHTML += '<b>NDVI Values</b><br>';
+
+            for (var i = 0; i < grades.length; i++) {
+                div.innerHTML +=
+                    '<i style="background:' + getColor(grades[i] + 0.1) + '"></i> ' +
+                    grades[i] + (grades[i + 1] ? ' &ndash; ' + grades[i + 1] + '<br>' : '+');
+            }
+
+            return div;
+        };
+
+        legend.addTo(map);
+
+        // Function to get color based on NDVI value
+        function getColor(d) {
+            return d > 0.8 ? '#006400' :
+                   d > 0.6 ? '#7FFF00' :
+                   d > 0.4 ? '#FFFF00' :
+                   d > 0.2 ? '#FFA500' :
+                   d > 0   ? '#FF0000' :
+                             '#FFFFFF';
+        }
+    </script>
+</body>
+</html>

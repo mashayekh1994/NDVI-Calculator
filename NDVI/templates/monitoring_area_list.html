@@ -1,0 +1,35 @@
+<!-- monitoring_area_list.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Monitoring Areas</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <h1>Monitoring Areas</h1>
+    <a href="{% url 'add_monitoring_area' %}">Add New Area</a>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Area</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for area in areas %}
+            <tr>
+                <td>{{ area.name }}</td>
+                <td>{{ area.area }}</td>
+                <td>
+                    <a href="{% url 'edit_monitoring_area' area.pk %}">Edit</a>
+                    <a href="{% url 'delete_monitoring_area' area.pk %}">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

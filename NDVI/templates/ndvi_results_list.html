@@ -1,0 +1,20 @@
+<!-- ndvi_results_list.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>NDVI Results</title>
+</head>
+<body>
+    <h1>NDVI Results</h1>
+    <ul>
+        {% for result in ndvi_results %}
+            <li>
+                <a href="{% url 'ndvi_result_detail' result.pk %}">
+                    {{ result.area.name }} - {{ result.capture_date }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
